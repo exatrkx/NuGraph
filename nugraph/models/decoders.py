@@ -4,7 +4,7 @@ from abc import ABC
 
 from torch import Tensor, cat
 import torch.nn as nn
-from torch_geometric.nn.aggr import SoftmaxAggregation
+from torch_geometric.nn.aggr import LSTMAggregation
 
 import torchmetrics as tm
 
@@ -193,9 +193,11 @@ class EventDecoder(DecoderBase):
 
         self.pool = nn.ModuleDict()
         for p in planes:
-            self.pool[p] = SoftmaxAggregation(learn=True)
+            self.pool[p] = LSTMAggregation(
+                in_channels=len(planes) * len(semantic_classes) * node_features,
+                out_channels=node_features)
         self.net = nn.Sequential(
-            nn.Linear(in_features=len(planes) * len(semantic_classes) * node_features,
+            nn.Linear(in_features=len(planes) * node_features,
                       out_features=len(event_classes)))
 
     def forward(self, x: dict[str, Tensor], batch: dict[str, Tensor]) -> dict[str, dict[str, Tensor]]:
