@@ -18,8 +18,6 @@ Model = ng.models.NuGraph2
 
 def configure():
     parser = argparse.ArgumentParser(sys.argv[0])
-    parser.add_argument('--device', type=int, required=True,
-                        help='GPU to run inference with')
     parser.add_argument('--checkpoint', type=str, required=True,
                         help='Checkpoint file to resume training from')
     parser.add_argument('--use-existing', default=False, action='store_true',
@@ -38,14 +36,11 @@ def plot(args):
     params = {}
     params['batch_size'] = args.batch_size
 
-    nudata = Data(args.data_path,
-                  args.batch_size,
-                  planes=['u','v','y'],
-                  classes=['MIP','HIP','shower','michel','diffuse'])
+    nudata = Data(args.data_path, args.batch_size)
 
     if args.benchmark_cpu:
-        nudata = Data(args.data_path, 1, planes=['u','v','y'], classes=['MIP','HIP','shower','michel','diffuse'])
-        trainer = pl.Trainer(accelerator='cpu')
+        nudata = Data(args.data_path, 1)
+        trainer = pl.Trainer(accelerator='cpu', logger=False)
         t0 = time.time()
         trainer.test(model, datamodule=nudata)
         print('inference on CPU takes', (time.time()-t0)/len(nudata.test_dataset), 's/evt')
@@ -56,8 +51,10 @@ def plot(args):
         for i in range(9):
             batch_size = pow(2, i)
             x.append(batch_size)
-            nudata = Data(args.data_path, batch_size, planes=['u','v','y'], classes=['MIP','HIP','shower','michel','diffuse'])
-            trainer = pl.Trainer(accelerator='gpu', devices=[6], logger=None)
+            nudata = Data(args.data_path, batch_size)
+            accelerator, devices = ng.util.configure_device()
+            trainer = pl.Trainer(accelerator=accelerator,
+                                 devices=devices, logger=False)
             t0 = time.time()
             trainer.test(model, datamodule=nudata)
             y.append((time.time()-t0)/len(nudata.test_dataset))
