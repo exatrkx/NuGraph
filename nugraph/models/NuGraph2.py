@@ -25,6 +25,7 @@ class NuGraph2(LightningModule):
                  node_features: int = 8,
                  edge_features: int = 8,
                  sp_features: int = 8,
+                 event_features: int = 8,
                  vertex_features: int = 32,
                  planes: list[str] = ['u','v','y'],
                  semantic_classes: list[str] = ['MIP','HIP','shower','michel','diffuse'],
@@ -72,6 +73,7 @@ class NuGraph2(LightningModule):
         if event_head:
             self.event_decoder = EventDecoder(
                 node_features,
+                event_features,
                 planes,
                 semantic_classes,
                 event_classes)
@@ -267,6 +269,8 @@ class NuGraph2(LightningModule):
                            help='Hidden dimensionality of edge convolutions')
         model.add_argument('--sp-feats', type=int, default=16,
                            help='Hidden dimensionality of spacepoint convolutions')
+        model.add_argument('--event-feats', type=int, default=8,
+                           help='Hidden dimensionality of event decoder')
         model.add_argument('--vertex-feats', type=int, default=32,
                            help='Hidden dimensionality of vertex decoder')
         model.add_argument('--event', action='store_true', default=False,
