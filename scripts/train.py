@@ -45,6 +45,7 @@ def train(args):
                       node_features=args.node_feats,
                       edge_features=args.edge_feats,
                       sp_features=args.sp_feats,
+                      event_features=args.event_feats,
                       vertex_features=args.vertex_feats,
                       planes=nudata.planes,
                       semantic_classes=nudata.semantic_classes,
