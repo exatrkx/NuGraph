@@ -187,19 +187,26 @@ class EventDecoder(DecoderBase):
     '''
     def __init__(self,
                  node_features: int,
+                 event_features: int,
                  planes: list[str],
                  semantic_classes: list[str],
                  event_classes: list[str]):
+
+        self.binary = (len(event_classes) == 2)
+
+        n = len(event_classes)
+        loss_func = nn.BCELoss() if self.binary else RecallLoss()
+
         super().__init__('event',
                          planes,
                          event_classes,
-                         RecallLoss(),
+                         loss_func,
                          weight=2.)
 
         # torchmetrics arguments
         metric_args = {
-            'task': 'multiclass',
-            'num_classes': len(event_classes)
+            'task': 'binary' if self.binary else 'multiclass',
+            'num_classes': len(event_classes),
         }
 
         self.recall = tm.Recall(**metric_args)
@@ -212,19 +219,31 @@ class EventDecoder(DecoderBase):
         self.pool = nn.ModuleDict()
         for p in planes:
             self.pool[p] = LSTMAggregation(
-                in_channels=len(planes) * len(semantic_classes) * node_features,
-                out_channels=node_features)
+                in_channels=len(semantic_classes) * node_features,
+                out_channels=event_features)
+        out_features = 1 if self.binary else len(event_classes)
         self.net = nn.Sequential(
-            nn.Linear(in_features=len(planes) * node_features,
-                      out_features=len(event_classes)))
+            nn.Linear(in_features=len(planes) * event_features,
+                      out_features=event_features),
+            nn.ReLU(),
+            nn.Linear(in_features=event_features,
+                      out_features=out_features),
+        )
 
     def forward(self, x: dict[str, Tensor],
                 batch: dict[str, Tensor]) -> dict[str, dict[str, Tensor]]:
         x = [ pool(x[p].flatten(1), batch[p]) for p, pool in self.pool.items() ]
-        return { 'x': { 'evt': self.net(cat(x, dim=1)) }}
+        x = self.net(cat(x, dim=1))
+        if self.binary:
+            x = x.squeeze(dim=1).sigmoid()
+        return { 'x': { 'evt': x }}
 
     def arrange(self, batch) -> tuple[Tensor, Tensor]:
-        return batch['evt'].x, batch['evt'].y
+        x = batch['evt'].x
+        y = batch['evt'].y
+        if self.binary:
+            y = y.float()
+        return x, y
 
     def metrics(self, x: Tensor, y: Tensor, stage: str) -> dict[str, Any]:
         return {
