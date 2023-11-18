@@ -17,6 +17,8 @@ fi
 # set variables
 lim_train_batches=8
 lim_val_batches=2
+epochs=3
+
 
 # set directory
 cd "$(dirname "$0")"
@@ -24,8 +26,9 @@ cd "$(dirname "$0")"
 # run training
 python train.py \
                  --data-path /net/projects/fermi-2/CHEP2023.gnn.h5 \
-                 --logdir ../../../../net/projects/fermi-2/logs/ --name ${log_name} \
-                 --version semantic-filter \
+                 --logdir ../../../../net/projects/fermi-2/logs/ \
+                 --name  "Vertex_Decoder_Search"\
+                 --version ${log_name} \
                  --semantic \
                  --filter \
                  --vertex \
@@ -34,4 +37,5 @@ python train.py \
                  --vertex-aggr ${vtx_aggr} \
                  --vertex-lstm-feats ${vtx_lstm_features} \
                  --vertex-mlp-feats ${vtx_mlp_features} \
-                 --num_nodes 4
+                 --num_nodes 4 \
+                 --epochs ${epochs}

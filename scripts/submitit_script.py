@@ -1,4 +1,6 @@
 from pathlib import Path
+import submitit
+import subprocess
 
 # your actual code will have more and longer functions than this sample
 ##def get_mean_amount_after_year(path_to_csv: str, earliest_year: int):
@@ -6,6 +8,11 @@ from pathlib import Path
 ##    df = pd.read_csv(path_to_csv)
 ##    df = df[df["year"] > earliest_year]
 ##    return df["amount"].mean()
+
+def run_vertex_decoder_search():
+    subprocess.call(['bash', 'full_vertex_param_search.sh'], shell=True)
+        # apparently shell=True can be a security risk if using external
+        # inputs, but we are not in this case
 
 if __name__ == "__main__":
     import argparse
@@ -30,7 +37,7 @@ if __name__ == "__main__":
         query = json.load(f)
     # save query parameters to variables. if you want a default, better to put
     # at the outermost call to a function.
-    path_to_csv = query.get("path_to_csv")
+    #path_to_data = query.get("path_to_data")
     ##default_earliest_year = 2005
     ##earliest_year = query.get("earliest_year", default_earliest_year)
 
@@ -57,4 +64,10 @@ if __name__ == "__main__":
     #     )
 
     # Kate code
-    executor.submit()
+    if query.get("submitit", False):
+        executor.submit(
+            run_vertex_decoder_search()
+        )
+    else:
+        run_vertex_decoder_search()
+    
