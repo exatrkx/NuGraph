@@ -9,11 +9,14 @@ def run_vertex_decoder_search():
     print('run_vertex_decoder_search called')
     
     # call bash script
+
     # with open('scripts/full_vertex_param_search.sh', 'r') as file:
     #     script = file.read()
     # subprocess.call(script, shell=True)
 
-    subprocess.call("scripts/full_vertex_param_search.sh")
+    # use /bin/bash shell interpreter, so that our sh script does not bug
+    # need to make sh script executable before running (chmod +x SCRIPT_PATH)
+    subprocess.call("scripts/full_vertex_param_search.sh")  
 
     print('bash script run')
 
@@ -38,10 +41,12 @@ if __name__ == "__main__":
         raise ValueError(
             f"Could not locate {args.query} in query directory or as absolute path"
         )
+    
+    # load queried arguments from JSON
     with open(query_path) as f:
         query = json.load(f)
 
-    # instantiate executor
+    # instantiate executor & update params
     executor = submitit.AutoExecutor(folder='../../../../net/projects/fermi-2/logs/')
     executor.update_parameters(**query.get("slurm", {}))
 
@@ -51,6 +56,7 @@ if __name__ == "__main__":
         executor.submit(
             run_vertex_decoder_search()
         )
+    # otherwise, call function directly
     else:
         print("submitit false")
         run_vertex_decoder_search()

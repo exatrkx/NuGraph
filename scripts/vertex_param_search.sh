@@ -4,18 +4,25 @@
 # Request space on the SLURM (prior to run)
 #srun -p general -t 60:00 --mem 1000  –pty /bin/bash
 
+
 # pull in passed arguments
 args=("$@")
+
+# aggregator
 vtx_aggr=${args[0]}
+
+# mlp features
 vtx_mlp_features=${args[1]}
 
+# lstm features
 if [ ${#args[@]} == 3 ]; then
     vtx_lstm_features=${args[2]}
-    log_name="shantestlog_aggr_${vtx_aggr}_mlpfeats_${vtx_mlp_features}_lstmfeats_${vtx_lstm_features}"
+    log_name="log_aggr_${vtx_aggr}_mlpfeats_${vtx_mlp_features}_lstmfeats_${vtx_lstm_features}"
 
 else
-    log_name="shantestlog_aggr_${vtx_aggr}_mlpfeats_${vtx_mlp_features}"
+    log_name="log_aggr_${vtx_aggr}_mlpfeats_${vtx_mlp_features}"
 fi
+
 
 # set variables
 lim_train_batches=8
@@ -25,6 +32,7 @@ epochs=3
 
 # set directory
 cd "$(dirname "$0")"
+
 
 # run training
 python train.py \
@@ -40,5 +48,5 @@ python train.py \
                  --vertex-aggr ${vtx_aggr} \
                  --vertex-lstm-feats ${vtx_lstm_features} \
                  --vertex-mlp-feats ${vtx_mlp_features} \
+                 --epochs ${epochs} \
                 #  --num_nodes 4 \
-                 --epochs ${epochs}

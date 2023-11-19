@@ -11,11 +11,13 @@
 cd "$(dirname "$0")"
 
 
-# Search spaces
+# search spaces
 vtx_aggr=("lstm")
 vtx_lstm_features=(2 4 8 16 32)
 vtx_mlp_features=(2 4 8 16 32)
 
+
+# loop through parameters in search spaces
 for fxn in "${vtx_aggr[@]}"; do
 
     for mlp_feat in "${vtx_mlp_features[@]}"; do
