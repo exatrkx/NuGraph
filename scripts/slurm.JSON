@@ -1,5 +1,5 @@
 {
-    "submitit": false,
+    "submitit": true,
     "slurm": {
         "slurm_partition": "general",
         "slurm_job_name": "sample",

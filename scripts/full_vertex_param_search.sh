@@ -1,23 +1,35 @@
+#!/bin/bash
+
+
 # 
 # This file will allow us to loop through the different hyperparameter spaces
 # and run the vertex_param_search.sh to optimize
 #
 
+
+# set directory
+cd "$(dirname "$0")"
+
+
 # Search spaces
-vtx_aggr=(“lstm”)
+vtx_aggr=("lstm")
 vtx_lstm_features=(2 4 8 16 32)
 vtx_mlp_features=(2 4 8 16 32)
 
-for fxn in ${vtx_aggr[@]}; do
-    for mlp_feat in ${vtx_mlp_features[@]}; do
+for fxn in "${vtx_aggr[@]}"; do
+
+    for mlp_feat in "${vtx_mlp_features[@]}"; do
+
         if [ "$fxn" == "lstm" ]; then
-            for lstm_feat in ${vtx_lstm_features[@]}; do
+            for lstm_feat in "${vtx_lstm_features[@]}"; do
                 args=("$fxn" "$mlp_feat" "$lstm_feat")
-               
+                /bin/bash vertex_param_search.sh "${args[@]}"
+            done
         else
             args=("$fxn" "$mlp_feat")
+            /bin/bash vertex_param_search.sh "${args[@]}"
         fi
-            
-        ./vertex_param_search "${$args[@]}"
+
     done
+
 done

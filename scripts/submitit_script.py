@@ -5,10 +5,16 @@ import subprocess
 
 # your actual code will have more and longer functions than this sample
 def run_vertex_decoder_search():
+
     print('run_vertex_decoder_search called')
-    subprocess.call(['bash', 'full_vertex_param_search.sh'], shell=True)
-        # apparently shell=True can be a security risk if using external
-        # inputs, but we are not in this case
+    
+    # call bash script
+    # with open('scripts/full_vertex_param_search.sh', 'r') as file:
+    #     script = file.read()
+    # subprocess.call(script, shell=True)
+
+    subprocess.call("scripts/full_vertex_param_search.sh")
+
     print('bash script run')
 
 
@@ -43,7 +49,7 @@ if __name__ == "__main__":
     if query.get("submitit", True):
         print("submitit true")
         executor.submit(
-            run_vertex_decoder_search
+            run_vertex_decoder_search()
         )
     else:
         print("submitit false")
