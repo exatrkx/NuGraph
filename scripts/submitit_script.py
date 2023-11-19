@@ -43,7 +43,7 @@ if __name__ == "__main__":
     if query.get("submitit", True):
         print("submitit true")
         executor.submit(
-            run_vertex_decoder_search
+            run_vertex_decoder_search()
         )
     else:
         print("submitit false")
