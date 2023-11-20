@@ -60,7 +60,16 @@ def run_bayesian_search():
     return (best_X, best_y)
 
 # TODO Change this if necessary; matched to submitit_script.py's logdir
-folder = '../../../../net/projects/fermi-2/logs/'
+
+def get_bash_username():
+    # Get the user's USERNAME
+    username = os.environ.get('USER')
+    if username is None:
+        sys.exit('ERROR: USER variable is not set.')
+    return username
+
+username = get_bash_username()
+folder = '../../../../net/projects/fermi-2/logs/' + username
 
 def find_latest_file(folder):
     '''
