@@ -38,6 +38,7 @@ def run_bayesian_search():
     single_set_outcome = optimize_model(model,
                    parameter_space)
     (all_X, all_y), (best_X, best_y) = single_set_outcome
+    perc_accuracy = all_y * -100
 
     calls = np.linspace(1, 10, 10)
     best_yet_y = []
