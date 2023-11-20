@@ -4,7 +4,7 @@ import subprocess
 
 
 # your actual code will have more and longer functions than this sample
-def run_vertex_decoder_search():
+def run_vertex_decoder_search(script_path = "scripts/full_vertex_param_search.sh"):
 
     print('run_vertex_decoder_search called')
     
@@ -16,7 +16,8 @@ def run_vertex_decoder_search():
 
     # use /bin/bash shell interpreter, so that our sh script does not bug
     # need to make sh script executable before running (chmod +x SCRIPT_PATH)
-    subprocess.call("scripts/full_vertex_param_search.sh")  
+    subprocess.call(['chmod', '+x', script_path])
+    subprocess.call(script_path)  
 
     print('bash script run')
 
@@ -29,7 +30,7 @@ if __name__ == "__main__":
     # set up command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--query", help="path to json file containing query", default=None
+        "--query", help="path to json file containing query", default='scripts/slurm.JSON'
     )
     args = parser.parse_args()
     

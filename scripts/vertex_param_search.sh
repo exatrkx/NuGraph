@@ -8,6 +8,12 @@
 # pull in passed arguments
 args=("$@")
 
+# make logdir under username
+username=$USER
+logdir="../../../../net/projects/fermi-2/logs/$username"
+mkdir -p "$logdir"
+echo $logdir
+
 # aggregator
 vtx_aggr=${args[0]}
 
@@ -27,7 +33,7 @@ fi
 # set variables
 lim_train_batches=8
 lim_val_batches=2
-epochs=3
+epochs=1 #CHANGE
 
 
 # set directory
@@ -37,7 +43,7 @@ cd "$(dirname "$0")"
 # run training
 python train.py \
                  --data-path /net/projects/fermi-2/CHEP2023.gnn.h5 \
-                 --logdir ../../../../net/projects/fermi-2/logs/ \
+                 --logdir ${logdir} \
                  --name  "Vertex_Decoder_Search"\
                  --version ${log_name} \
                  --semantic \
