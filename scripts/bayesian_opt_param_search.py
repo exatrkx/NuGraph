@@ -9,6 +9,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skopt import gp_minimize
 from skopt.space import Real, Integer, Categorical
+from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
+import subprocess
+import os
+import glob
 
 def run_bayesian_search():
     '''
@@ -24,8 +28,8 @@ def run_bayesian_search():
         Real(0, 10, name = 'vtx_mlp_features')
         ]
     
-    #TODO: connect to train and test model
-    model = NULL
+    # Function model
+    model = model_function
 
     # run optimizer to find optimal parameter set
     decoded_param_space = param_space_decoder(parameter_space)
@@ -54,6 +58,44 @@ def run_bayesian_search():
     visualize_optimization(calls, all_y, best_yet_y)
     
     return (best_X, best_y)
+
+# TODO Change this if necessary; matched to submitit_script.py's logdir
+folder = '../../../../net/projects/fermi-2/logs/'
+
+def find_latest_file(folder):
+    '''
+    Finds the path to the most recent metric log to deal with
+    multiple iterations.
+    '''
+    files=glob.glob(os.path.join(folder, '*'))
+    latest_file = max(files, key=os.path.getmtime)
+    return latest_file
+
+def extract_vertex_resolution(folder):
+    '''
+    Extracts the value of vertex_resolution on the test data.
+    This can also be modified to include the validation.
+    '''
+    latest_log = find_latest_file(folder)
+    ea = event_accumulator.EventAccumulator(latest_log)
+    ea.Reload()
+    vertex_resolution = ea.Scalars('vertex_resolution/test')[-1].value
+    return vertex_resolution
+
+def model_function(encoded_parameters):
+    '''
+    Objective function for minimization. Converts decoded parameter space
+    to form compatible with bash command and calls the vertex_param_search.sh
+    script. Returns -1 * vertex_resolution.
+    '''
+    decoded_params = param_space_decoder(encoded_parameters)
+    # Convert dictionary -> string for bash command
+    parameters_str = ' '.join(f" --{key} {value}" for key, value in decoded_params.items())
+    # TODO: Change if needed to call a different script
+    bash_cmd = f"bash vertex_param_search.sh {parameters_str}"
+    subprocess.run(bash_cmd, shell=True)
+    metric = extract_vertex_resolution(folder)
+    return -metric 
 
 
 def param_space_decoder(parameters):
@@ -128,6 +170,8 @@ def optimize_model(model, parameter_space):
         model,
         dimensions = parameter_space,
         # args=(split),
+        # gp_hedge randomly picks from LCB, EI, PI acquisitions at each iteration
+        acq_func = "gp_hedge",
         n_calls = n_learning_points + n_test_points,
         n_initial_points = n_test_points,
         random_state = 60615
