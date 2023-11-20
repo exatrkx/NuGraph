@@ -162,8 +162,6 @@ def optimize_model(model, parameter_space):
         rf_opt.x: optimal parameter set chosen
         rf_opt.fun: success rate of optimal parameter
     '''
-    # TODO: figure out how to pass the decoded params to the model while still
-    #       using the non-decoded params for the optimizer
     n_test_points = 0
     n_learning_points = 10
     rf_opt = gp_minimize(
