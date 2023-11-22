@@ -31,9 +31,9 @@ fi
 
 
 # set variables
-lim_train_batches=8
-lim_val_batches=2
-epochs=1 #CHANGE
+# lim_train_batches=8
+# lim_val_batches=2
+epochs=80 #CHANGE
 
 
 # set directory
@@ -49,10 +49,11 @@ python train.py \
                  --semantic \
                  --filter \
                  --vertex \
-                 --limit_train_batches ${lim_train_batches}\
-                 --limit_val_batches ${lim_val_batches}\
                  --vertex-aggr ${vtx_aggr} \
                  --vertex-lstm-feats ${vtx_lstm_features} \
                  --vertex-mlp-feats ${vtx_mlp_features} \
-                 --epochs ${epochs} \
-                #  --num_nodes 4 \
+                 --epochs ${epochs}
+                #  --limit_train_batches ${lim_train_batches}\
+                #  --limit_val_batches ${lim_val_batches}\
+                 #  --num_nodes 4 \
+

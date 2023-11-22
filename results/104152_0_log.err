@@ -1,0 +1,18 @@
+submitit ERROR (2023-11-21 17:16:29,105) - Submitted job triggered an exception
+Traceback (most recent call last):
+  File "/home/shangao/miniconda3/envs/NuGraph/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/shangao/miniconda3/envs/NuGraph/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/shangao/miniconda3/envs/NuGraph/lib/python3.10/site-packages/submitit/core/_submit.py", line 11, in <module>
+    submitit_main()
+  File "/home/shangao/miniconda3/envs/NuGraph/lib/python3.10/site-packages/submitit/core/submission.py", line 76, in submitit_main
+    process_job(args.folder)
+  File "/home/shangao/miniconda3/envs/NuGraph/lib/python3.10/site-packages/submitit/core/submission.py", line 69, in process_job
+    raise error
+  File "/home/shangao/miniconda3/envs/NuGraph/lib/python3.10/site-packages/submitit/core/submission.py", line 55, in process_job
+    result = delayed.result()
+  File "/home/shangao/miniconda3/envs/NuGraph/lib/python3.10/site-packages/submitit/core/utils.py", line 133, in result
+    self._result = self.function(*self.args, **self.kwargs)
+TypeError: 'NoneType' object is not callable
+srun: error: g006: task 0: Exited with exit code 1
