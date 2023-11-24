@@ -27,10 +27,12 @@ for fxn in "${vtx_aggr[@]}"; do
             for lstm_feat in "${vtx_lstm_features[@]}"; do
                 args=("$fxn" "$mlp_feat" "$lstm_feat")
                 /bin/bash vertex_param_search.sh "${args[@]}"
+                # sbatch vertex_param_search.sh "${args[@]}"
             done
         else
             args=("$fxn" "$mlp_feat")
             /bin/bash vertex_param_search.sh "${args[@]}"
+            # sbatch vertex_param_search.sh "${args[@]}"
         fi
 
     done

@@ -1,8 +1,18 @@
 #!/bin/bash
+#SBATCH --job-name=fermi2
+#SBATCH --output=/net/projects/fermi-2/logs/%A_%a.out
+#SBATCH --error=/net/projects/fermi-2/logs/%A_%a.err
+#SBATCH --time=12:00:00
+#SBATCH --partition=general
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=12
+#SBATCH --gres=gpu:1
+#SBATCH --constraint=a100
+#SBATCH --mem-per-cpu=64G
 
 
-# Request space on the SLURM (prior to run)
-#srun -p general -t 60:00 --mem 1000  –pty /bin/bash
+# srun -p general -t "12:00:00" --mem "64G" --cpus-per-task 12 --gres gpu:1 --constraint a100 --pty /bin/bash
 
 
 # pull in passed arguments
