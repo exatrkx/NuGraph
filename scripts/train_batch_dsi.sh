@@ -6,7 +6,7 @@
 #SBATCH --partition=general
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=12
+#SBATCH --cpus-per-task=2
 #SBATCH --gres=gpu:1
 #SBATCH --constraint=a100
 #SBATCH --mem-per-cpu=64G
@@ -17,7 +17,7 @@
 # sbatch scripts/train_batch_dsi.sh
 
 # or to run interactively, request session with:
-# srun -p general -t "12:00:00" --mem "64G" --cpus-per-task 12 --gres gpu:1 --constraint a100 --pty /bin/bash
+# srun -p general -t "12:00:00" --mem "64G" --cpus-per-task 2 --gres gpu:1 --constraint a100 --pty /bin/bash
 
 
 
