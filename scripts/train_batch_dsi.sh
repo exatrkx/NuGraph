@@ -21,14 +21,9 @@
 
 
 
-# conda init bash
-# source ~/.bashrc
-# conda activate NuGraph
-
-
 ################ CHANGE ################
 # mlp features
-vtx_mlp_features=32
+vtx_mlp_features=128
 
 # aggregator
 vtx_aggr="lstm"
@@ -39,13 +34,14 @@ vtx_lstm_features=8
 # set variables
 epochs=80 
 
-# don't forget to also update the checkpoint directory in the python script call below with every submission
+# don't forget to also update the arguments of the python script call below: it should contain with (--logdir & --name) OR (--resume)
+# ckpt="epoch=57-step=272194.ckpt"
 #########################################
 
 
 # make logdir under username
 username=$USER
-logdir="/net/projects/fermi-2/logs/$username/"
+logdir="/net/projects/fermi-2/logs/${username}"
 mkdir -p "$logdir"
 echo $logdir
 
@@ -65,9 +61,9 @@ srun python scripts/train.py \
                  --vertex-lstm-feats ${vtx_lstm_features} \
                  --vertex-mlp-feats ${vtx_mlp_features} \
                  --epochs ${epochs} \
-                 --resume "${logdir}/Vertex_Decoder_Search/${log_name}/checkpoints/epoch=29-step=140790.ckpt" \
-                #  --logdir ${logdir} \
-                #  --name  "Vertex_Decoder_Search"\
+                 --logdir ${logdir} \
+                 --name  "Vertex_Decoder_Search"\
+                #  --resume "${logdir}/Vertex_Decoder_Search/${log_name}/checkpoints/${ckpt}" \
                 #  --limit_train_batches ${lim_train_batches}\
                 #  --limit_val_batches ${lim_val_batches}\
                 #  --num_nodes 4 \
