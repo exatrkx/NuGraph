@@ -30,7 +30,11 @@ def configure():
     parser = Data.add_data_args(parser)
     parser = Model.add_model_args(parser)
     parser = Model.add_train_args(parser)
-    return parser.parse_args()
+    args = parser.parse_args()
+    # invalid checkpoint path -> None
+    if args.resume is not None and not os.path.exists(args.resume): 
+        args.resume = None
+    return args
 
 def train(args):
 
@@ -62,7 +66,11 @@ def train(args):
         version = args.version
         os.makedirs(os.path.join(logdir, args.name), exist_ok=True)
     elif args.resume is not None and args.name is None and args.logdir is None:
-        model = Model.load_from_checkpoint(args.resume)
+        files =  os.listdir(args.resume)
+        files.sort(key=lambda x: os.path.getctime(os.path.join(path, x)))
+        latest_file = max(files, key=lambda x: os.path.getctime(os.path.join(path, x)))
+        ckpt_path = os.path.join(args.resume, latest_file)
+        model = Model.load_from_checkpoint(ckpt_path)
         stub = os.path.dirname(os.path.dirname(args.resume))
         stub, version = os.path.split(stub)
         logdir, name = os.path.split(stub)
