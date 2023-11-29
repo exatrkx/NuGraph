@@ -65,15 +65,18 @@ def train(args):
         logdir = args.logdir
         version = args.version
         os.makedirs(os.path.join(logdir, args.name), exist_ok=True)
-    elif args.resume is not None and args.name is None and args.logdir is None:
-        files =  os.listdir(args.resume)
-        files.sort(key=lambda x: os.path.getctime(os.path.join(path, x)))
-        latest_file = max(files, key=lambda x: os.path.getctime(os.path.join(path, x)))
+    elif args.resume is not None:
+        files = os.listdir(args.resume)
+        files.sort(key=lambda x: os.path.getctime(os.path.join(args.resume, x)))
+        latest_file = max(files, key=lambda x: os.path.getctime(os.path.join(args.resume, x)))
         ckpt_path = os.path.join(args.resume, latest_file)
         model = Model.load_from_checkpoint(ckpt_path)
-        stub = os.path.dirname(os.path.dirname(args.resume))
-        stub, version = os.path.split(stub)
-        logdir, name = os.path.split(stub)
+        name = args.name
+        logdir = args.logdir
+        version = args.version
+        # stub = os.path.dirname(os.path.dirname(args.resume))
+        # stub, version = os.path.split(stub)
+        # logdir, name = os.path.split(stub)
     else:
         raise Exception('You must pass either the --name and --logdir arguments to start an existing training, or the --resume argument to resume an existing one.')
 
@@ -97,7 +100,7 @@ def train(args):
                          logger=logger, profiler=args.profiler,
                          callbacks=callbacks, plugins=plugins)
 
-    trainer.fit(model, datamodule=nudata, ckpt_path=args.resume)
+    trainer.fit(model, datamodule=nudata, ckpt_path=ckpt_path)
     trainer.test(datamodule=nudata)
 
 if __name__ == '__main__':
