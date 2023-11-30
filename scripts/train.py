@@ -65,6 +65,7 @@ def train(args):
         logdir = args.logdir
         version = args.version
         os.makedirs(os.path.join(logdir, args.name), exist_ok=True)
+        ckpt_path = None
     elif args.resume is not None:
         files = os.listdir(args.resume)
         files.sort(key=lambda x: os.path.getctime(os.path.join(args.resume, x)))
