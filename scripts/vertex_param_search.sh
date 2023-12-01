@@ -41,8 +41,8 @@ fi
 
 
 # set variables
-lim_train_batches=8
-lim_val_batches=2
+lim_train_batches=1
+lim_val_batches=1
 epochs=80 #CHANGE
 
 
