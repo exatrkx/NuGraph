@@ -44,7 +44,8 @@ def train(args):
     nudata = Data(args.data_path, batch_size=args.batch_size, 
                   shuffle=args.shuffle, balance_frac=args.balance_frac)
 
-    if args.name is not None and args.logdir is not None and args.resume is None:
+    if args.name is not None and args.logdir is not None and args.resume is None: 
+        # No checkpoint directory provided
         model = Model(in_features=4,
                       planar_features=args.planar_feats,
                       nexus_features=args.nexus_feats,
@@ -61,23 +62,18 @@ def train(args):
                       vertex_head=args.vertex,
                       checkpoint=not args.no_checkpointing,
                       lr=args.learning_rate)
-        name = args.name
-        logdir = args.logdir
-        version = args.version
-        os.makedirs(os.path.join(logdir, args.name), exist_ok=True)
-        ckpt_path = None
-    elif args.resume is not None:
+        name, logdir, version = args.name, args.logdir, args.version
+        os.makedirs(os.path.join(logdir, args.name), exist_ok=True) # Make a checkpoint directory
+        ckpt_path = None # No initial weights for the model to load
+
+    elif args.resume is not None: 
+        # If checkpoint directory is provided
         files = os.listdir(args.resume)
         files.sort(key=lambda x: os.path.getctime(os.path.join(args.resume, x)))
         latest_file = max(files, key=lambda x: os.path.getctime(os.path.join(args.resume, x)))
-        ckpt_path = os.path.join(args.resume, latest_file)
+        ckpt_path = os.path.join(args.resume, latest_file) # Find most recent filepath
         model = Model.load_from_checkpoint(ckpt_path)
-        name = args.name
-        logdir = args.logdir
-        version = args.version
-        # stub = os.path.dirname(os.path.dirname(args.resume))
-        # stub, version = os.path.split(stub)
-        # logdir, name = os.path.split(stub)
+        name, logdir, version = args.name, args.logdir, args.version
     else:
         raise Exception('You must pass either the --name and --logdir arguments to start an existing training, or the --resume argument to resume an existing one.')
 
