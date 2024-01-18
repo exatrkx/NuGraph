@@ -89,7 +89,7 @@ def extract_vertex_resolution(folder):
     latest_log = find_latest_file(folder)
     ea = event_accumulator.EventAccumulator(latest_log)
     ea.Reload()
-    vertex_resolution = ea.Scalars('vertex_resolution/test')[-1].value
+    vertex_resolution = ea.Scalars('vertex_resolution/val')[-1].value
     return vertex_resolution
 
 def model_function(encoded_parameters):
@@ -105,7 +105,7 @@ def model_function(encoded_parameters):
     bash_cmd = f"bash vertex_param_search.sh {parameters_str}"
     subprocess.run(bash_cmd, shell=True)
     metric = extract_vertex_resolution(folder)
-    return -metric 
+    return metric 
 
 
 def param_space_decoder(parameters):

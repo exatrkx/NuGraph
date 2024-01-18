@@ -11,12 +11,15 @@
 #SBATCH --constraint=a100
 #SBATCH --mem-per-cpu=64G
 
+#SBATCH --mail-type=ALL  # Mail events (NONE, BEGIN, END, FAIL, ALL)
+# SBATCH --mail-user=username@rcc.uchicago.edu  # mail notification for the job
 #SBATCH --open-mode=append # So that outcomes are appended, not rewritten
 #SBATCH --signal=SIGUSR1@90
 
 #SBATCH --mail-type=ALL  # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=jiheeyou@rcc.uchicago.edu  # mail notification for the job
 
+# SBATCH --nodelist=i001
 echo $SLURM_RESTART_COUNT
 
 # Instructions:
@@ -33,13 +36,13 @@ echo $SLURM_RESTART_COUNT
 
 ################ CHANGE ################
 # mlp features
-vtx_mlp_features=128
+vtx_mlp_features=8
 
 # aggregator
 vtx_aggr="lstm"
 
 # lstm features
-vtx_lstm_features=16
+vtx_lstm_features=4
 
 # set variables
 epochs=80
