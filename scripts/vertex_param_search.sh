@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=fermi2
-#SBATCH --output=/net/projects/fermi-2/logs/%A_%a.out
-#SBATCH --error=/net/projects/fermi-2/logs/%A_%a.err
+#SBATCH --output=/net/projects/fermi-gnn/logs/%A_%a.out
+#SBATCH --error=/net/projects/fermi-gnn/logs/%A_%a.err
 #SBATCH --time=12:00:00
 #SBATCH --partition=general
 #SBATCH --nodes=1

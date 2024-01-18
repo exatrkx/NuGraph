@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=fermi2
-#SBATCH --output=/net/projects/fermi-2/logs/%u/%A.out
-#SBATCH --error=/net/projects/fermi-2/logs/%u/%A.err
+#SBATCH --output=/net/projects/fermi-gnn/%u/%A.out
+#SBATCH --error=/net/projects/fermi-gnn/%u/%A_.err
 #SBATCH --time=12:00:00
 #SBATCH --partition=general
 #SBATCH --nodes=1
@@ -11,11 +11,12 @@
 #SBATCH --constraint=a100
 #SBATCH --mem-per-cpu=64G
 
-#SBATCH --mail-type=ALL  # Mail events (NONE, BEGIN, END, FAIL, ALL)
-#SBATCH --mail-user=username@rcc.uchicago.edu  # mail notification for the job
 #SBATCH --open-mode=append # So that outcomes are appended, not rewritten
 #SBATCH --signal=SIGUSR1@90
-#SBATCH --nodelist=i001
+
+#SBATCH --mail-type=ALL  # Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-user=jiheeyou@rcc.uchicago.edu  # mail notification for the job
+
 echo $SLURM_RESTART_COUNT
 
 # Instructions:
@@ -43,13 +44,13 @@ vtx_lstm_features=16
 # set variables
 epochs=80
 
-lim_train_batches=100
-lim_val_batches=100
+# lim_train_batches=100
+# lim_val_batches=100
 ##########################################
 
 # make logdir under username
 username=$USER
-logdir="/net/projects/fermi-2/logs/${username}"
+logdir="/net/projects/fermi-gnn/logs/${username}"
 mkdir -p "$logdir"
 echo $logdir
 
@@ -60,7 +61,7 @@ log_name="log_aggr_${vtx_aggr}_mlpfeats_${vtx_mlp_features}_lstmfeats_${vtx_lstm
 
 # run training
 srun python scripts/train.py \
-                 --data-path /net/projects/fermi-2/CHEP2023.gnn.h5 \
+                 --data-path /net/projects/fermi-gnn/CHEP2023.gnn.h5 \
                  --version ${log_name} \
                  --semantic \
                  --filter \
@@ -72,13 +73,13 @@ srun python scripts/train.py \
                  --logdir ${logdir} \
                  --name  "Vertex_Decoder_Search" \
                  --resume "${logdir}/Vertex_Decoder_Search/${log_name}/checkpoints" \
-                 --limit_train_batches ${lim_train_batches} \
-                 --limit_val_batches ${lim_val_batches} \
+                #  --limit_train_batches ${lim_train_batches} \
+                #  --limit_val_batches ${lim_val_batches} \
 
 # Requeue job if job didn't finish during time limit
-if [ $? -eq 0 ]; then
-    echo "Job completed successfully"
-else
-    echo "Requeuing the job"
-    scontrol requeue $SLURM_JOB_ID
-fi
+# if [ $? -eq 0 ]; then
+#     echo "Job completed successfully"
+# else
+#     echo "Requeuing the job"
+#     scontrol requeue $SLURM_JOB_ID
+# fi

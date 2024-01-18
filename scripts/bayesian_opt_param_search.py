@@ -70,7 +70,7 @@ def get_bash_username():
     return username
 
 username = get_bash_username()
-folder = '../../../../net/projects/fermi-2/logs/' + username
+folder = '../../../../net/projects/fermi-gnn/logs/' + username
 
 def find_latest_file(folder):
     '''
