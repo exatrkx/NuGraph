@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/home/setu/NuGraph/scripts/train.py", line 103, in <module>
+    train(args)
+  File "/home/setu/NuGraph/scripts/train.py", line 91, in train
+    trainer = pl.Trainer(accelerator= 'gpu', devices=devices,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/utilities/argparse.py", line 70, in insert_env_defaults
+    return fn(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 401, in __init__
+    self._accelerator_connector = _AcceleratorConnector(
+                                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/connectors/accelerator_connector.py", line 149, in __init__
+    self._set_parallel_devices_and_init_accelerator()
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/connectors/accelerator_connector.py", line 389, in _set_parallel_devices_and_init_accelerator
+    self._devices_flag = accelerator_cls.parse_devices(self._devices_flag)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/accelerators/cuda.py", line 82, in parse_devices
+    return _parse_gpu_ids(devices, include_cuda=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/lightning_fabric/utilities/device_parser.py", line 102, in _parse_gpu_ids
+    return _sanitize_gpu_ids(gpus, include_cuda=include_cuda, include_mps=include_mps)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/lightning_fabric/utilities/device_parser.py", line 135, in _sanitize_gpu_ids
+    raise MisconfigurationException(
+lightning_fabric.utilities.exceptions.MisconfigurationException: You requested gpu: [4]
+ But your machine only has: [0]
+srun: error: j001-ds: task 0: Exited with exit code 1

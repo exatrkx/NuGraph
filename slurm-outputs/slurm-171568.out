@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/setu/NuGraph/scripts/train.py", line 97, in <module>
+    train(args)
+  File "/home/setu/NuGraph/scripts/train.py", line 44, in train
+    model = Model(in_features=4,
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/NuGraph/nugraph/models/NuGraph2.py", line 94, in __init__
+    self.vertex_decoder = VertexDecoder(
+                          ^^^^^^^^^^^^^^
+  File "/home/setu/NuGraph/nugraph/models/decoders.py", line 286, in __init__
+    self.linear[p] = nn.Linear(in_features =in_features, out_features = aggr_in)
+    ^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1688, in __getattr__
+    raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+AttributeError: 'VertexDecoder' object has no attribute 'linear'
+srun: error: j002-ds: task 0: Exited with exit code 1

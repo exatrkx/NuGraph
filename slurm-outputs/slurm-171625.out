@@ -1,0 +1,99 @@
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A100 80GB PCIe') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loading `train_dataloader` to estimate number of stepping batches.
+
+  | Name             | Type            | Params
+-----------------------------------------------------
+0 | encoder          | Encoder         | 4.8 K 
+1 | plane_net        | PlaneNet        | 195 K 
+2 | nexus_net        | NexusNet        | 158 K 
+3 | semantic_decoder | SemanticDecoder | 976   
+4 | filter_decoder   | FilterDecoder   | 964   
+5 | vertex_decoder   | VertexDecoder   | 72.9 K
+-----------------------------------------------------
+433 K     Trainable params
+0         Non-trainable params
+433 K     Total params
+1.735     Total estimated model params size (MB)
+SLURM auto-requeueing enabled. Setting signal handlers.
+Traceback (most recent call last):
+  File "/home/setu/NuGraph/scripts/train.py", line 97, in <module>
+    train(args)
+  File "/home/setu/NuGraph/scripts/train.py", line 92, in train
+    trainer.fit(model, datamodule=nudata, ckpt_path=args.resume)
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 544, in fit
+    call._call_and_handle_interrupt(
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 580, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 989, in _run
+    results = self._run_stage()
+              ^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 1033, in _run_stage
+    self._run_sanity_check()
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 1062, in _run_sanity_check
+    val_loop.run()
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/loops/utilities.py", line 182, in _decorator
+    return loop_run(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 134, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 391, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 309, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/strategies/strategy.py", line 403, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/NuGraph/nugraph/models/NuGraph2.py", line 205, in validation_step
+    loss, metrics = self.step(batch, 'val', True)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/NuGraph/nugraph/models/NuGraph2.py", line 136, in step
+    x = self(batch.collect('x'),
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/NuGraph/nugraph/models/NuGraph2.py", line 122, in forward
+    ret.update(decoder(m, batch))
+               ^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/NuGraph/nugraph/models/decoders.py", line 303, in forward
+    return { 'x_vtx': { 'evt': self.net(x) }}
+                               ^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/container.py", line 217, in forward
+    input = module(input)
+            ^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch/nn/modules/linear.py", line 116, in forward
+    return F.linear(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (64x24 and 960x64)
+Sanity Checking: |          | 0/? [00:00<?, ?it/s]Sanity Checking:   0%|          | 0/2 [00:00<?, ?it/s]Sanity Checking DataLoader 0:   0%|          | 0/2 [00:00<?, ?it/s]                                                                   srun: error: i001: task 0: Exited with exit code 1

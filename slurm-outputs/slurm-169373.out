@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/home/setu/NuGraph/scripts/train.py", line 97, in <module>
+    train(args)
+  File "/home/setu/NuGraph/scripts/train.py", line 65, in train
+    model = Model.load_from_checkpoint(args.resume)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/utilities/model_helpers.py", line 100, in wrapper
+    return self.method(cls, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/core/module.py", line 1561, in load_from_checkpoint
+    loaded = _load_from_checkpoint(
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/core/saving.py", line 89, in _load_from_checkpoint
+    model = _load_state(cls, checkpoint, strict=strict, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/pytorch_lightning/core/saving.py", line 156, in _load_state
+    obj = cls(**_cls_kwargs)
+          ^^^^^^^^^^^^^^^^^^
+  File "/home/setu/NuGraph/nugraph/models/NuGraph2.py", line 94, in __init__
+    self.vertex_decoder = VertexDecoder(
+                          ^^^^^^^^^^^^^^
+  File "/home/setu/NuGraph/nugraph/models/decoders.py", line 275, in __init__
+    self.aggr[p] = aggr_resolver(aggr, **(aggr_kwargs or {}))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch_geometric/nn/resolver.py", line 77, in aggregation_resolver
+    return resolver(aggrs, aggr_dict, query, base_cls, None, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/setu/miniforge3/envs/numl-dsi/lib/python3.12/site-packages/torch_geometric/resolver.py", line 32, in resolver
+    obj = cls(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^
+TypeError: SetTransformerAggregation.__init__() missing 1 required positional argument: 'channels'
+srun: error: j002-ds: task 0: Exited with exit code 1
